@@ -19,7 +19,6 @@ import com.darkcart.util.vnpres.vns.VisualNovel;
 
 import net.arikia.dev.drpc.DiscordEventHandlers;
 import net.arikia.dev.drpc.DiscordRPC;
-import net.arikia.dev.drpc.DiscordRichPresence;
 
 public class VNpres {
 
@@ -55,8 +54,8 @@ public class VNpres {
 				initDiscord(selected.getAssetID());
 				System.out.println("initialized");
 				VNpres.selected = selected;
-				System.out.println(Arrays.toString(getRouteNames(selected)));
-				routeList = new JList<String>(getRouteNames(selected));
+				System.out.println(Arrays.toString(selected.getRouteNames()));
+				routeList = new JList<String>(selected.getRouteNames());
 				frame.add(routeList, BorderLayout.CENTER);
 				frame.revalidate();
 			}
@@ -72,7 +71,7 @@ public class VNpres {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DiscordRPC.discordUpdatePresence(getRouteByName(selected, routeList.getSelectedValue()));
+				DiscordRPC.discordUpdatePresence(selected.getRouteByName(routeList.getSelectedValue()));
 			}
 
 		});
@@ -106,26 +105,6 @@ public class VNpres {
 		return null;
 	}
 
-	private String[] getRouteNames(VisualNovel v) {
-		String[] routeNames = new String[v.getRoutes().size()];
-		ArrayList<DiscordRichPresence> routes = v.getRoutes();
-		for (int i = 0; i < routes.size(); i++) {
-			routeNames[i] = routes.get(i).details;
-		}
-		return routeNames;
-	}
-
-	private DiscordRichPresence getRouteByName(VisualNovel selected, String name) {
-		ArrayList<DiscordRichPresence> routes = selected.getRoutes();
-		for (int i = 0; i < routes.size(); i++) {
-			if (routes.get(i).details.equals(name)) {
-				return routes.get(i);
-			}
-		}
-		return null;
-	}
-
-	
 	private void initDiscord(String id) {
 		DiscordEventHandlers handlers = new DiscordEventHandlers.Builder().build();
 		DiscordRPC.discordInitialize(id, handlers, false);
@@ -133,11 +112,9 @@ public class VNpres {
 	}
 
 	/*
-	private void setPresence(String routeName, String image) {
-		DiscordRichPresence.Builder p = new DiscordRichPresence.Builder("Test");
-		p.setDetails(routeName);
-		p.setBigImage(image, routeName);
-		DiscordRPC.discordUpdatePresence(p.build());
-	}
-	*/
+	 * private void setPresence(String routeName, String image) {
+	 * DiscordRichPresence.Builder p = new DiscordRichPresence.Builder("Test");
+	 * p.setDetails(routeName); p.setBigImage(image, routeName);
+	 * DiscordRPC.discordUpdatePresence(p.build()); }
+	 */
 }
