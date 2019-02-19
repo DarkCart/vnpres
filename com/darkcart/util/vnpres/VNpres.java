@@ -51,6 +51,8 @@ public class VNpres {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				frame.remove(routeList);
+				DiscordRPC.discordShutdown();
 				VisualNovel selected = getVisualNovelByName(selector.getSelectedItem());
 				initDiscord(selected.getAssetID());
 				System.out.println("initialized");
@@ -127,8 +129,7 @@ public class VNpres {
 
 	
 	private void initDiscord(String id) {
-		DiscordEventHandlers handlers = new DiscordEventHandlers.Builder().build();
-		DiscordRPC.discordInitialize(id, handlers, false);
+		DiscordRPC.discordInitialize(id, null, false);
 		DiscordRPC.discordRegister(id, "");
 	}
 
